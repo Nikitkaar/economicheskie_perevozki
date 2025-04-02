@@ -61,7 +61,7 @@ class WordEquationReplacer:
         logging.info(f"Документ сохранен как: {new_file_path}")
 
 
-class Counter:
+class second_:
     # Статический словарь с данными о локомотивах
     locomotives_data = {
         "ВЛ60": {
@@ -88,42 +88,86 @@ class Counter:
         }}
 
     def __init__(self, **kwargs):
-        self.Loc = kwargs.get("Loc")
-        self.VGruz = kwargs.get("VGruz")
-        self.VEmpty = kwargs.get("VEmpty")
-        self.rail = kwargs.get("rail")
-        self.iznos = kwargs.get("iznos")
-        self.shpali = kwargs.get("shpali")
-        self.screpleniya = kwargs.get("screpleniya")
-        self.rezina = kwargs.get("rezina")
-        self.ballast = kwargs.get("ballast")
-        self.circle_moment = kwargs.get("circle_moment")
-        self.sdvijka = kwargs.get("sdvijka")
-        self.R = kwargs.get("R") * 1000
-        self.ugolPovorotaNAcurve = kwargs.get("ugolPovorotaNAcurve")
-        self.VpryamoNAPerevode = kwargs.get("VpryamoNAPerevode")
-        self.VbokovoyNAPerevode = kwargs.get("VbokovoyNAPerevode")
-        self.jo = kwargs.get("jo")
-        self.γo = kwargs.get("γo")
-        self.µ = kwargs.get("µ")
-        self.𝜂1 = Counter.locomotives_data[f"{self.Loc}"]["Поперечные разбеги"]["крайних"]
-        self.𝜂2 = Counter.locomotives_data[f"{self.Loc}"]["Поперечные разбеги"]["крайних"]
-        self.λ = Counter.locomotives_data[f"{self.Loc}"]["Длина жесткой базы"]
-        self.L = Counter.locomotives_data[f"{self.Loc}"]["Длина жесткой базы"]
-        self.r = Counter.locomotives_data[f"{self.Loc}"]["Радиус колеса"]
+        self.pepls_movie = kwargs.get("pepls_movie")
+        self.townsman_up = kwargs.get("townsman_up")
+        self.villager_up = kwargs.get("villager_up")
+        self.villager_p = kwargs.get("villager_p")
+        self.townsman_station = kwargs.get("townsman_station")
 
-        self.qmax = 1509
-        self.τ = 70  # угол наклона рабочей поверхности гребня колеса к горизонту, равный для локомотивных бандажей – 70°; self.r
-        self.t = 13
-        self.S = 1520
+        self.wood = kwargs.get("wood")
+        self.wood_products = kwargs.get("wood_products")
+        self.Lumber = kwargs.get("Lumber")
+        self.roundwood = kwargs.get("roundwood")
+        self.firewood = kwargs.get("firewood")
 
-        self.b = round((self.L * (self.r + self.t) * math.tan(math.radians(self.τ))) / (
-                self.R + (self.S / 2) - (self.r + self.t) * math.tan(math.radians(self.τ))),2)
-        self.fh = round(((self.L + self.b) ** 2) / (2 * self.R),2)
-        self.Sopt = round(self.qmax + self.fh - self.𝜂1 + 4,2)
-        self.bb = round((self.L * self.r * math.tan(math.radians(self.τ))) / (2 * self.R),2)
-        self.fhh = round(((self.L + 2 * self.bb) ** 2) / (8 * self.R),2)
-        self.fv = round(((self.L - 2 * self.bb) ** 2) / (8 * self.R),2)
-        self.δ_min = 7
-        self.Smin = round(self.qmax + self.fh - self.fv + (self.δ_min / 2) + 4,2)
+        self.t = 10
+
+
+
+        # Площади станций
+        self.FctA = 894.1351
+        self.FctB = 686.4126
+        self.Fct = 894.1351 + 686.4126
+
+        # Население сельское на отчетный период
+        self.AoVillA = self.villager_p * self.FctA
+        self.AoVillB = self.villager_p * self.FctB
+
+        # Сельское население на расчетный период
+        self.ApVillA = self.AoVillA*((1+(self.villager_up/100))**self.t)
+        self.ApVillB = self.AoVillB * ((1 + (self.villager_up/100)) ** self.t)
+
+        # Городское население расчет
+        # self.ApTownman = self.townsman_station*((1+(self.townsman_up/100))**self.t)
+        self.ApTownman = self.townsman_station * ((1 + self.townsman_up/100) ** 10)
+
+        # Всего населения на станции
+        self.pepleA = self.ApVillA + (self.ApTownman*1000)
+        self.pepleB = self.ApVillB
+
+        # Лесосырье
+        self.true_wood = 0.7 * self.wood
+        self.true_wood_products = self.true_wood * (self.wood_products/100)
+        self.true_Lumber = self.true_wood * (self.Lumber/100)
+        self.true_roundwood = self.true_wood * (self.roundwood/100)
+        self.true_firewood = self.true_wood * (self.firewood/100)
+        # ВСЕГО
+        self.all = self.true_wood_products + self.true_Lumber + self.true_roundwood + self.true_firewood
+
+class third_():
+    def __init__(self, **kwargs):
+        self.plot_posevov = kwargs.get("plot_posevov")
+        self.ves_posevov = kwargs.get("ves_posevov")
+        self.up_posevov = kwargs.get("up_posevov")
+        self.eat_posevov = kwargs.get("eat_posevov")
+        self.need_city_wheat = kwargs.get("need_city_wheat")
+        self.need_vilolage_wheat = kwargs.get("need_vilolage_wheat")
+        self.ves_furaj = kwargs.get("ves_furaj")
+        self.up_furaj = kwargs.get("up_furaj")
+        self.eat_furaj = kwargs.get("eat_furaj")
+        self.ves_potato = kwargs.get("ves_potato")
+        self.up_potato = kwargs.get("up_potato")
+        self.eat_potato = kwargs.get("eat_potato")
+        self.need_city_potato = kwargs.get("need_city_potato")
+        self.need_village_potato = kwargs.get("need_village_potato")
+        self.ves_culture = kwargs.get("ves_culture")
+        self.up_culture = kwargs.get("up_culture")
+
+        # Площади станций
+        self.FctA = 894.1351
+        self.FctB = 686.4126
+        self.Fct = 894.1351 + 686.4126
+
+        # Общая посевная площадь
+        self.Fct_pos_A = self.FctA * self.plot_posevov / 1000
+        self.Fct_pos_B = self.FctB * self.plot_posevov / 1000
+
+
+
+
+
+
+
+
+
 
