@@ -105,9 +105,9 @@ class second_:
 
 
         # Площади станций
-        self.FctA = 894.1351
-        self.FctB = 686.4126
-        self.Fct = 894.1351 + 686.4126
+        self.FctA = 894.14
+        self.FctB = 686.41
+        self.Fct = 894.1351 + 686.01
 
         # Население сельское на отчетный период
         self.AoVillA = self.villager_p * self.FctA
@@ -132,35 +132,37 @@ class second_:
         self.true_roundwood = self.true_wood * (self.roundwood/100)
         self.true_firewood = self.true_wood * (self.firewood/100)
         # ВСЕГО
-        self.all = self.true_wood_products + self.true_Lumber + self.true_roundwood + self.true_firewood
+        self.all = (self.true_wood_products + self.true_Lumber + self.true_roundwood + self.true_firewood) * 1000
 
 class third_():
     def __init__(self, **kwargs):
-        self.plot_posevov = kwargs.get("plot_posevov")
-        self.ves_posevov = kwargs.get("ves_posevov")
-        self.up_posevov = kwargs.get("up_posevov")
-        self.eat_posevov = kwargs.get("eat_posevov")
-        self.need_city_wheat = kwargs.get("need_city_wheat")
-        self.need_vilolage_wheat = kwargs.get("need_vilolage_wheat")
-        self.ves_furaj = kwargs.get("ves_furaj")
-        self.up_furaj = kwargs.get("up_furaj")
-        self.eat_furaj = kwargs.get("eat_furaj")
-        self.ves_potato = kwargs.get("ves_potato")
-        self.up_potato = kwargs.get("up_potato")
-        self.eat_potato = kwargs.get("eat_potato")
-        self.need_city_potato = kwargs.get("need_city_potato")
-        self.need_village_potato = kwargs.get("need_village_potato")
-        self.ves_culture = kwargs.get("ves_culture")
-        self.up_culture = kwargs.get("up_culture")
+            self.FctB = kwargs.get("FctB")
+            self.FctA = kwargs.get("FctA")
+            self.plot_posevov = kwargs.get("plot_posevov")
+            self.ves_posevov = kwargs.get("ves_posevov")
+            self.up_posevov = kwargs.get("up_posevov")
+            self.eat_posevov = kwargs.get("eat_posevov")
+            self.need_city_wheat = kwargs.get("need_city_wheat")
+            self.need_vilolage_wheat = kwargs.get("need_vilolage_wheat")
+            self.ves_furaj = kwargs.get("ves_furaj")
+            self.up_furaj = kwargs.get("up_furaj")
+            self.eat_furaj = kwargs.get("eat_furaj")
+            self.ves_potato = kwargs.get("ves_potato")
+            self.up_potato = kwargs.get("up_potato")
+            self.eat_potato = kwargs.get("eat_potato")
+            self.need_city_potato = kwargs.get("need_city_potato")
+            self.need_village_potato = kwargs.get("need_village_potato")
+            self.ves_culture = kwargs.get("ves_culture")
+            self.up_culture = kwargs.get("up_culture")
 
-        # Площади станций
-        self.FctA = 894.1351
-        self.FctB = 686.4126
-        self.Fct = 894.1351 + 686.4126
+            # Площади станций
+            #self.FctA = 894.1351
+            #self.FctB = 686.4126
+            #self.Fct = 894.1351 + 686.4126
 
-        # Общая посевная площадь
-        self.Fct_pos_A = self.FctA * self.plot_posevov / 1000
-        self.Fct_pos_B = self.FctB * self.plot_posevov / 1000
+            # Общая посевная площадь
+            self.Fct_pos_A = self.FctA * self.plot_posevov / 1000
+            self.Fct_pos_B = self.FctB * self.plot_posevov / 1000
 
 
 
