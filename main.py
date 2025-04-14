@@ -7,7 +7,7 @@ import numpy as np
 from pyautocad import Autocad, APoint  # Импортируйте необходимые классы из библиотеки Autocad
 
 from initial_data import WordEquationReplacer, second_, third_
-from  drawing import  AutoCADLinesPlacer
+from drawing import AutoCADLinesPlacer
 #from autocad import AutoCADLines, AutoCADLines_1
 
 
@@ -356,11 +356,11 @@ class App:
         self.tranzit_BA_tovar_narod_mineral = data.get("транзитные грузы от Б к А_ минеральные удобрения")
         self.tranzit_BA_prochie = data.get("транзитные грузы от Б к А_прочие грузы")
 
-        self.results_tabl_tranzit_vivoz = self.tranzit_BA_Metall + self.tranzit_BA_car + self.tranzit_BA_wood
-        + self.tranzit_BA_sh_hozyaystvo + self.tranzit_BA_tovar_narod_mineral + self.tranzit_BA_prochie
+        self.results_tabl_tranzit_vivoz = self.tranzit_BA_Metall + self.tranzit_BA_car + self.tranzit_BA_wood + self.tranzit_BA_sh_hozyaystvo + self.tranzit_BA_tovar_narod_mineral + self.tranzit_BA_prochie
 
-        self.results_tabl_tranzit_vvoz = self.tranzit_AB_coal + self.tranzit_AB_prochie + self.tranzit_AB_rock + self.tranzit_AB_oil
-        + self.tranzit_AB_build + self.tranzit_AB_tovar_narod
+        self.results_tabl_tranzit_vvoz = self.tranzit_AB_coal + self.tranzit_AB_prochie + self.tranzit_AB_rock + self.tranzit_AB_oil + self.tranzit_AB_build + self.tranzit_AB_tovar_narod
+
+
 
         self.wagons =  data = {
     "Полувагон_8": {
@@ -660,6 +660,55 @@ class App:
         self.fi4 = round(self.itogvagona8/(self.itogvagona4+self.itogvagona8),2)
         self.teta = round((self.itogVesvagona8 + self.itogVesvagona4)/self.itogi,2)
 
+        self.Vp = 23.4
+        self.ω1o = 1.9 + 0.01 * self.Vp + 0.0003 * self.Vp**2
+        self.qo4 = self.Vesvagona4/4
+        self.qo8 = self.Vesvagona8 / 8
+        self.ω24 = 0.7 + ((3 + 0.1 * self.Vp + 0.0025 * self.Vp**2) / self.qo4)
+        self.ω28 =  0.7 +(((6 + 0.038 * self.Vp + 0.0021 * self.Vp**2 ))/self.qo8)
+        self.ω2o = self.ω24 * self.β4 + self.ω28 * self.β8
+        self.Fkp = 50600
+        self.P = 260
+        self.ip = 10
+        self.Qp = (self.Fkp - self.P * (self.ω1o + self.ip))/ (self.ω2o + self.ip)
+
+        def ni(self, β_i, сpi):
+            return round(1, 2)
+
+        self.lvag4coal = round(self.vag4coal * 14,2)
+        self.lvag8coal = round(self.vag8coal * 20,2)
+        self.lvag4oil = round(self.vag4oil * 12,2)
+        self.lvag8oil = round(self.vag8oil * 21,2)
+        self.lvag4Build = round(self.vag4coal * 15,2)
+        self.lvag4_Build = round(self.vag4coal * 14,2)
+        self.lvag4_potreb_narod = round(self.vag4narod_potrebl * 15,2)
+        self.vsegoL4vag = round(self.lvag4coal + self.lvag4oil + self.lvag4Build + self.lvag4_Build + self.lvag4_potreb_narod, 2)
+        self.vsegoL8vag = round(self.lvag8coal + self.lvag8oil, 2)
+
+        self.lfoursrednee = round(self.vsegoL4vag/self.itogvagona4, 2)
+        self.leightsrednee = round(self.vsegoL8vag/self.itogvagona8, 2)
+
+        self.nfour = round((self.β4 * self.Qp)/(self.Vesvagona4),2)
+        self.neight = round((self.β8 * self.Qp)/(self.Vesvagona8),2)
+
+        self.lc = round(self.lfoursrednee * self.nfour + self.leightsrednee * self.neight,2)
+        self.lp = self.lc + 46 + 10
+
+        self.Qokr = self.nfour * self.qo4 + self.neight * self.qo8
+        self.wtrfour = 28/(self.qo4+7)
+        self.wtreight = 28 / (self.qo8 + 7)
+        self.wtr = self.wtrfour * self.β4 + self.wtreight * self.β8
+        self.Qtr = (self.Fkp / (self.wtr + 10))-self.P
+
+        self.lp = self.lc + 46 + 10
+        self.lp = self.lc + 46 + 10
+        self.lp = self.lc + 46 + 10
+        self.lp = self.lc + 46 + 10
+        self.lp = self.lc + 46 + 10
+        self.lp = self.lc + 46 + 10
+        self.lp = self.lc + 46 + 10
+        self.lp = self.lc + 46 + 10
+        self.lp = self.lc + 46 + 10
         messagebox.showinfo("Успех", "Все данные успешно введены!")
 
         self.root.destroy()  # Закрыть окно после подтверждения
@@ -1071,8 +1120,7 @@ class App:
                                          build=f'{self.tranzit_AB_build*1000}',
                                          Metall=f'{self.tranzit_BA_Metall*1000}',
                                          narod_potrebl=f'{self.tranzit_AB_tovar_narod*1000}',
-                                         narod_potrebl_=f'{round((self.tranzit_BA_car * 1000) + (self.f_orest+second.all+self.tranzit_BA_wood*1000) + (self.tranzit_BA_Metall*1000)
-                                         + (self.tranzit_AB_tovar_narod*1000) + (self.tranzit_BA_tovar_narod_mineral *1000+ self.m_ineral) + (self.tranzit_BA_sh_hozyaystvo*1000 + self.s_h + self.itogo_vivoz_sh), 2)}',
+                                         narod_potrebll=f'{round((self.tranzit_BA_car * 1000) + (self.f_orest+second.all+self.tranzit_BA_wood*1000) + (self.tranzit_BA_Metall*1000)+ (self.tranzit_AB_tovar_narod*1000) + (self.tranzit_BA_tovar_narod_mineral *1000+ self.m_ineral) + (self.tranzit_BA_sh_hozyaystvo*1000 + self.s_h + self.itogo_vivoz_sh), 2)}',
                                          mineral=f'{self.tranzit_BA_tovar_narod_mineral *1000+ self.m_ineral}',
                                          s_h=f'{self.tranzit_BA_sh_hozyaystvo*1000 + self.s_h + self.itogo_vivoz_sh}',
                                          car=f'{self.tranzit_BA_car*1000}',
@@ -1089,8 +1137,7 @@ class App:
                                          netto16_4_Build=f"{round(β_4(self, 1, self.qbr_Build_4, 0) * (self.tranzit_AB_build * 1000/2),2)}",
                                          netto16_4_Build_=f"{round(β_4(self, 1, self.qbr_Build_4_, 0) * (self.tranzit_AB_build * 1000/2),2)}",
 
-                                         promtovari_prochie_4=f"{round(β_4(self, 1, self.qbr_narod_potrebl_and_prochie_4, 0) * (self.tranzit_BA_car * 1000) + (self.f_orest+second.all+self.tranzit_BA_wood*1000) + (self.tranzit_BA_Metall*1000)
-                                         + (self.tranzit_AB_tovar_narod*1000) + (self.tranzit_BA_tovar_narod_mineral *1000+ self.m_ineral) + (self.tranzit_BA_sh_hozyaystvo*1000 + self.s_h + self.itogo_vivoz_sh), 2)}",
+                                         promtovari_prochie_4=f"{round(β_4(self, 1, self.qbr_narod_potrebl_and_prochie_4, 0) * (self.tranzit_BA_car * 1000) + (self.f_orest+second.all+self.tranzit_BA_wood*1000) + (self.tranzit_BA_Metall*1000) + (self.tranzit_AB_tovar_narod*1000) + (self.tranzit_BA_tovar_narod_mineral *1000+ self.m_ineral) + (self.tranzit_BA_sh_hozyaystvo*1000 + self.s_h + self.itogo_vivoz_sh), 2)}",
 
                                          vag4narod_potrebl=f'{self.vag4narod_potrebl}',
                                          vag4coal=f'{self.vag4coal}',
@@ -1134,6 +1181,8 @@ class App:
                                          itogVesvagona8=f'{self.itogVesvagona8}',
                                          itogiVesa=f'{round(self.itogVesvagona8 + self.itogVesvagona4, 2)}',
 
+                                         Vesvagonafour=f'{self.Vesvagona4}',
+                                         Vesvagonaeight=f'{self.Vesvagona8}',
                                          Vesvagona4=f'{self.Vesvagona4}',
                                          Vesvagona8=f'{self.Vesvagona8}',
                                          β4=f'{self.β4}',
@@ -1141,6 +1190,41 @@ class App:
                                          fi8=f'{self.fi8}',
                                          fi4=f'{self.fi4}',
                                          teta=f'{self.teta}',
+
+                                         Vpp=f'{self.Vp}',
+                                         woneo=f'{round(self.ω1o,2)}',
+                                         qfouro=f'{round(self.qo4,2)}',
+                                         qeighto=f'{round(self.qo8,2)}',
+                                         wtwofour=f'{round(self.ω24,2)}',
+                                         wtwoeight=f'{round(self.ω28,2)}',
+                                         wtwoo=f'{round(self.ω2o,2)}',
+                                         Fkpp=f'{round(self.Fkp,2)}',
+                                         Pp=f'{round(self.P,2)}',
+                                         ipp=f'{self.ip}',
+                                         Qpp=f'{round(self.Qp,2)}',
+                                         bfour=f'{round(self.β4,2)}',
+                                         beight=f'{round(self.β8,2)}',
+                                         lvag4coal=f'{self.lvag4coal}',
+                                         lvag8coal=f'{self.lvag8coal}',
+                                         lvag4oil=f'{self.lvag4oil}',
+                                         lvag8oil=f'{self.lvag8oil}',
+                                         lvag4Build=f'{self.lvag4Build}',
+                                         lvag4_Build=f'{self.lvag4_Build}',
+                                         lvag4_potreb_narod=f'{self.lvag4_potreb_narod}',
+                                         vsego4vag=f'{self.vsegoL4vag}',
+                                         vsego8vag=f'{self.vsegoL8vag}',
+                                         lfoursrednee=f'{self.vsegoL4vag}',
+                                         leightsrednee=f'{self.vsegoL8vag}',
+                                         nfour=f'{round(self.nfour,2)}',
+                                         neight=f'{round(self.neight,2)}',
+                                         lcc=f'{round(self.lc,2)}',
+                                         lpp=f'{round(self.lp,2)}',
+                                         Qokr=f'{round(self.Qokr,2)}',
+                                         wtrfour=f'{round(self.wtrfour,2)}',
+                                         wtreight=f'{round(self.wtreight,2)}',
+                                         wtr=f'{round(self.wtr,2)}',
+                                         Qtr=f'{round(self.Qtr,2)}',
+
                                          )
 
 
